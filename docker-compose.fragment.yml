@@ -1,0 +1,12 @@
+
+  capabilities-service:
+    image: ghcr.io/neosofia/capabilities-service
+    build:
+      context: ../capabilities
+    container_name: cdp-capabilities-service
+    env_file:
+      - ../capabilities/.env.example
+    environment:
+      ENV: development
+    ports:
+      - "8019:8019"
