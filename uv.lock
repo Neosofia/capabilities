@@ -81,7 +81,7 @@ wheels = [
 
 [[package]]
 name = "capabilities-service"
-version = "0.1.0"
+version = "0.1.1"
 source = { editable = "." }
 dependencies = [
     { name = "authentication-in-the-middle" },
@@ -117,7 +117,7 @@ requires-dist = [
     { name = "flask-talisman", specifier = ">=1.1.0" },
     { name = "gunicorn", specifier = ">=21.2.0" },
     { name = "httpx", specifier = ">=0.27.0" },
-    { name = "logenvelope", url = "https://github.com/Neosofia/sdk/releases/download/logenvelope-0.2.0/logenvelope-0.2.0-py3-none-any.whl" },
+    { name = "logenvelope", url = "https://github.com/Neosofia/sdk/releases/download/logenvelope-0.3.0/logenvelope-0.3.0-py3-none-any.whl" },
     { name = "pydantic", specifier = ">=2.8.0,<3.0.0" },
     { name = "pydantic-settings", specifier = ">=2.0.0,<3.0.0" },
     { name = "python-dotenv", specifier = ">=1.2.2" },
@@ -542,10 +542,10 @@ wheels = [
 
 [[package]]
 name = "logenvelope"
-version = "0.2.0"
-source = { url = "https://github.com/Neosofia/sdk/releases/download/logenvelope-0.2.0/logenvelope-0.2.0-py3-none-any.whl" }
+version = "0.3.0"
+source = { url = "https://github.com/Neosofia/sdk/releases/download/logenvelope-0.3.0/logenvelope-0.3.0-py3-none-any.whl" }
 wheels = [
-    { url = "https://github.com/Neosofia/sdk/releases/download/logenvelope-0.2.0/logenvelope-0.2.0-py3-none-any.whl", hash = "sha256:775c73278225ff887a80a2476381aba309b222fb9b746425c16d0e7776c7571c" },
+    { url = "https://github.com/Neosofia/sdk/releases/download/logenvelope-0.3.0/logenvelope-0.3.0-py3-none-any.whl", hash = "sha256:91e7b7901f948771049dd4387ba47a4b40ab8f19d249640f0eda0461a5f7f9a6" },
 ]
 
 [[package]]
