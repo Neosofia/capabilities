@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     service_name: str = "capabilities"
     env: str = "production"
     log_level: str = "info"
-    port: int = 8018
+    port: int = 8019
     trusted_proxy_hops: int = Field(default=1, ge=0)
 
     # Input validation settings

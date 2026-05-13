@@ -26,8 +26,8 @@ The machine-readable contract lives in `openapi.json`.
 | `LOG_LEVEL` | string | `info` | Minimum structured log severity. |
 | `PORT` | integer | `8019` | HTTP listener port. |
 | `TRUSTED_PROXY_HOPS` | integer | `0` | Number of trusted reverse proxies for `ProxyFix`. |
-| `AUTHORIZATION_POLICIES_DIR` | path | `policies` | Directory containing Cedar policy files and schema. |
-| `AUTHORIZATION_POLICY_CACHE_TTL` | integer | `60` | Seconds to cache the loaded policy bundle in process. |
+| `CAPABILITIES_POLICIES_DIR` | path | `policies` | Directory containing Cedar policy files and schema. |
+| `CAPABILITIES_POLICY_CACHE_TTL` | integer | `60` | Seconds to cache the loaded policy bundle in process. |
 | `MAX_CONTENT_LENGTH` | integer | `16384` | Maximum accepted request body size in bytes. |
 | `RATELIMIT_STORAGE_URI` | string | `memory://` | Rate-limit backend. Use Redis in multi-replica deployments. |
 | `HEALTH_RATE_LIMIT` | string | `600 per minute` | Health endpoint rate limit. |
@@ -37,7 +37,6 @@ The machine-readable contract lives in `openapi.json`.
 | `GUNICORN_KEEPALIVE` | integer | `5` | Gunicorn keepalive in seconds. |
 | `JWT_JWKS_URI` | string | | JWKS URI for token validation. |
 | `JWT_ISSUER` | string | | Expected JWT issuer. |
-| `JWT_AUDIENCE` | string | | Expected JWT audience. |
 
 ## Testing
 

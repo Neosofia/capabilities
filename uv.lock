@@ -34,15 +34,15 @@ wheels = [
 
 [[package]]
 name = "authentication-in-the-middle"
-version = "0.5.2"
-source = { url = "https://github.com/Neosofia/sdk/releases/download/authentication-in-the-middle/v0.5.2/authentication_in_the_middle-0.5.2-py3-none-any.whl" }
+version = "0.6.0"
+source = { url = "https://github.com/Neosofia/sdk/releases/download/authentication-in-the-middle/v0.6.0/authentication_in_the_middle-0.6.0-py3-none-any.whl" }
 dependencies = [
     { name = "cryptography" },
     { name = "flask" },
     { name = "pyjwt" },
 ]
 wheels = [
-    { url = "https://github.com/Neosofia/sdk/releases/download/authentication-in-the-middle/v0.5.2/authentication_in_the_middle-0.5.2-py3-none-any.whl", hash = "sha256:0d3e98c8ee82dbdb6019c03fbb6fc164c3774d36f83e62413d9588c68aa03f87" },
+    { url = "https://github.com/Neosofia/sdk/releases/download/authentication-in-the-middle/v0.6.0/authentication_in_the_middle-0.6.0-py3-none-any.whl", hash = "sha256:760c00c60adaf935d934d8c93f4480caa71a52dcf3938e03b99c636d65f5f1e9" },
 ]
 
 [package.metadata]
@@ -54,14 +54,14 @@ requires-dist = [
 
 [[package]]
 name = "authorization-in-the-middle"
-version = "0.3.1"
-source = { url = "https://github.com/Neosofia/sdk/releases/download/authorization-in-the-middle-0.3.1/authorization_in_the_middle-0.3.1-py3-none-any.whl" }
+version = "0.4.0"
+source = { url = "https://github.com/Neosofia/sdk/releases/download/authorization-in-the-middle/v0.4.0/authorization_in_the_middle-0.4.0-py3-none-any.whl" }
 dependencies = [
     { name = "cedarpy" },
     { name = "flask" },
 ]
 wheels = [
-    { url = "https://github.com/Neosofia/sdk/releases/download/authorization-in-the-middle-0.3.1/authorization_in_the_middle-0.3.1-py3-none-any.whl", hash = "sha256:a2fe0524d21bd8b76b69f2a48804e16ce003acbb73871c3f77587f3bfa3bdd62" },
+    { url = "https://github.com/Neosofia/sdk/releases/download/authorization-in-the-middle/v0.4.0/authorization_in_the_middle-0.4.0-py3-none-any.whl", hash = "sha256:2aaa95592f95ee6c4784fd26bb50150d42d050af14b6f7feb59bd76fb7ba017b" },
 ]
 
 [package.metadata]
@@ -81,7 +81,7 @@ wheels = [
 
 [[package]]
 name = "capabilities"
-version = "0.1.2"
+version = "0.2.0"
 source = { editable = "." }
 dependencies = [
     { name = "authentication-in-the-middle" },
@@ -110,8 +110,8 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "authentication-in-the-middle", url = "https://github.com/Neosofia/sdk/releases/download/authentication-in-the-middle/v0.5.2/authentication_in_the_middle-0.5.2-py3-none-any.whl" },
-    { name = "authorization-in-the-middle", url = "https://github.com/Neosofia/sdk/releases/download/authorization-in-the-middle-0.3.1/authorization_in_the_middle-0.3.1-py3-none-any.whl" },
+    { name = "authentication-in-the-middle", url = "https://github.com/Neosofia/sdk/releases/download/authentication-in-the-middle/v0.6.0/authentication_in_the_middle-0.6.0-py3-none-any.whl" },
+    { name = "authorization-in-the-middle", url = "https://github.com/Neosofia/sdk/releases/download/authorization-in-the-middle/v0.4.0/authorization_in_the_middle-0.4.0-py3-none-any.whl" },
     { name = "flask", specifier = ">=3.0.0" },
     { name = "flask-limiter", specifier = ">=3.5.0" },
     { name = "flask-talisman", specifier = ">=1.1.0" },
