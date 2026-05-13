@@ -24,7 +24,6 @@ class Settings(BaseSettings):
     jwt_public_key: str | None = Field(default=None)
     jwt_jwks_uri: str | None = Field(default=None)
     jwt_issuer: str = Field(default="https://neosofia.com")
-    jwt_audience: str = Field(default="api.neosofia.com")
 
     # Rate limit settings
     rate_limit_storage_uri: str = "memory://"

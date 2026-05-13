@@ -9,7 +9,7 @@ def create_token(roles, private_key):
         {
             "sub": "user_123",
             "iss": "https://test.neosofia.com",
-            "aud": "api.test.neosofia.com",
+            "aud": "capabilities",
             "roles": roles,
             "iat": now,
             "exp": now + 3600
