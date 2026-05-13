@@ -21,7 +21,7 @@ The machine-readable contract lives in `openapi.json`.
 
 | Variable | Type | Default | Effect |
 |---|---|---|---|
-| `SERVICE_NAME` | string | `capabilities-service` | Service name written into structured logs. |
+| `SERVICE_NAME` | string | `capabilities` | Service name written into structured logs. |
 | `ENV` | string | `development` | Controls development/test behavior such as HTTPS enforcement. |
 | `LOG_LEVEL` | string | `info` | Minimum structured log severity. |
 | `PORT` | integer | `8019` | HTTP listener port. |

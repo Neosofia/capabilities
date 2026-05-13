@@ -7,7 +7,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     # Operational settings
-    service_name: str = "service-template"
+    service_name: str = "capabilities"
     env: str = "production"
     log_level: str = "info"
     port: int = 8018

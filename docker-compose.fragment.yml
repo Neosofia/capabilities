@@ -1,9 +1,9 @@
 
-  capabilities-service:
-    image: ghcr.io/neosofia/capabilities-service
+  capabilities:
+    image: ghcr.io/neosofia/capabilities
     build:
       context: ../capabilities
-    container_name: cdp-capabilities-service
+    container_name: cdp-capabilities
     env_file:
       - ../capabilities/.env.example
     environment:

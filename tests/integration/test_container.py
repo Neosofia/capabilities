@@ -8,7 +8,7 @@ from testcontainers.core.container import DockerContainer
 
 pytestmark = pytest.mark.integration
 
-IMAGE_TAG = "service-template-test:latest"
+IMAGE_TAG = "capabilities-test:latest"
 
 
 @pytest.fixture(scope="session", autouse=True)
