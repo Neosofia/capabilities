@@ -30,6 +30,12 @@ def create_app(config: dict[str, Any] | None = None) -> Flask:
     if hasattr(settings, "jwt_jwks_uri"):
         app.config.setdefault("JWT_JWKS_URI", settings.jwt_jwks_uri)
 
+    if not settings.jwt_public_key and not settings.jwt_jwks_uri:
+        raise RuntimeError(
+            "Capabilities service requires JWT_PUBLIC_KEY or JWT_JWKS_URI to be configured. "
+            "Set one in the environment before startup."
+        )
+
     is_dev = settings.env.lower() in ("development", "test")
     if not is_dev and settings.trusted_proxy_hops > 0:
         app.wsgi_app = ProxyFix(app.wsgi_app, x_for=settings.trusted_proxy_hops, x_proto=settings.trusted_proxy_hops, x_host=settings.trusted_proxy_hops, x_prefix=settings.trusted_proxy_hops)
