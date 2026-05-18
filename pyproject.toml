@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "capabilities"
-version = "0.2.1"
+version = "0.2.2"
 description = "Capabilities service for cross-service UI toggles and lightweight permissions."
 requires-python = ">=3.14"
 dependencies = [
@@ -19,6 +19,7 @@ dependencies = [
     "pydantic-settings>=2.0.0,<3.0.0",
     "logenvelope",
     "python-dotenv>=1.2.2",
+    "flask-cors>=6.0.2",
 ]
 
 [tool.hatch.build.targets.wheel]

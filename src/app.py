@@ -1,6 +1,7 @@
 from typing import Any
 import traceback
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from flask_talisman import Talisman
 from werkzeug.exceptions import HTTPException
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -19,6 +20,7 @@ def _http_error_name(status_code: int) -> str:
 def create_app(config: dict[str, Any] | None = None) -> Flask:
     setup_logging(settings.service_name, settings.log_level)
     app = Flask(__name__)
+    CORS(app, origins=[settings.frontend_url], supports_credentials=True)
     if config:
         app.config.update(config)
     app.config.setdefault("MAX_CONTENT_LENGTH", settings.max_content_length)

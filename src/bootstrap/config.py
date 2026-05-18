@@ -33,6 +33,9 @@ class Settings(BaseSettings):
     web_concurrency: int = Field(default=2, ge=1)
     gunicorn_threads: int = Field(default=2, ge=1)
     gunicorn_timeout: int = Field(default=30, ge=1)
+    
+    # CORS settings
+    frontend_url: str = Field(default="http://localhost:5173")
     gunicorn_keepalive: int = Field(default=5, ge=1)
 
     model_config = SettingsConfigDict(
