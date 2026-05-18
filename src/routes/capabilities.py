@@ -8,7 +8,7 @@ bp = Blueprint("capabilities", __name__, url_prefix="/api/v1/capabilities")
 
 @bp.get("")
 @limiter.limit(settings.health_rate_limit)
-@with_authentication()
+@with_authentication(audience=settings.jwt_audience)
 def get_capabilities():
     # Enforces X-Active-Role via with_authentication, returns entity dict
     principal_entity = extract_jwt_principal_entity("ui")

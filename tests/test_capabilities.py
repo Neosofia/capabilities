@@ -3,13 +3,13 @@ import jwt
 import time
 from flask.testing import FlaskClient
 
-def create_token(roles, private_key):
+def create_token(roles, private_key, audience="capabilities"):
     now = int(time.time())
     return jwt.encode(
         {
             "sub": "user_123",
             "iss": "https://test.neosofia.com",
-            "aud": "capabilities",
+            "aud": audience,
             "roles": roles,
             "iat": now,
             "exp": now + 3600
@@ -63,4 +63,11 @@ def test_multiple_roles_requires_active_role(client: FlaskClient, rsa_keypair):
     )
     assert response.status_code == 200
     assert response.json["ui:menu:admin"] is False
+
+@pytest.mark.integration
+def test_accepts_authenticated_audience(client: FlaskClient, rsa_keypair):
+    token = create_token(["admin"], rsa_keypair["private"], audience=["authentication", "capabilities"])
+    response = client.get("/api/v1/capabilities", headers={"Authorization": f"Bearer {token}"})
+    assert response.status_code == 200
+    assert response.json["ui:menu:admin"] is True
 

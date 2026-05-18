@@ -1,7 +1,7 @@
 import base64
 from pathlib import Path
 
-from pydantic import Field
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     jwt_public_key: str | None = Field(default=None)
     jwt_jwks_uri: str | None = Field(default=None)
     jwt_issuer: str = Field(default="https://neosofia.com")
+    jwt_audience: str | list[str] = Field(default="capabilities")
 
     # Rate limit settings
     rate_limit_storage_uri: str = "memory://"
@@ -45,16 +46,24 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    def model_post_init(self, __context: object) -> None:
-        # Decode Base64 PEM keys passed in via environment variables
-        if self.jwt_public_key and self.jwt_public_key != "DEFAULT_PUBLIC_KEY":
-            try:
-                decoded = base64.b64decode(self.jwt_public_key).decode("utf-8")
-                object.__setattr__(self, "jwt_public_key", decoded)
-            except Exception as e:
-                # If it's already a PEM string (not base64), or we provided a JWKS URI, just continue
-                if "BEGIN PUBLIC KEY" not in self.jwt_public_key:
-                    raise ValueError(f"Failed to decode base64 jwt_public_key: {e}")
+    @field_validator("jwt_audience", mode="before")
+    def normalize_jwt_audience(cls, value: str | list[str] | None) -> list[str] | None:
+        if value is None:
+            return None
+        if isinstance(value, str):
+            return [entry.strip() for entry in value.split(",") if entry.strip()]
+        return [entry.strip() for entry in value if isinstance(entry, str) and entry.strip()]
+
+    @field_validator("jwt_public_key", mode="before")
+    def decode_jwt_public_key(cls, value: str | None) -> str | None:
+        if not value or value == "DEFAULT_PUBLIC_KEY":
+            return value
+        if "BEGIN PUBLIC KEY" in value:
+            return value
+        try:
+            return base64.b64decode(value).decode("utf-8")
+        except Exception as exc:
+            raise ValueError(f"Failed to decode base64 jwt_public_key: {exc}") from exc
 
 
 settings = Settings()  # type: ignore[call-arg]
