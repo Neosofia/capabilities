@@ -61,7 +61,7 @@ COPY src ./src
 COPY policies ./policies
 COPY openapi.json ./openapi.json
 
-EXPOSE 8018
+EXPOSE 8019
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
     CMD python -c "import httpx; httpx.get('http://localhost:8019/health', timeout=3).raise_for_status()" || exit 1

@@ -30,6 +30,7 @@ def app_container():
     container = DockerContainer(IMAGE_TAG)
     container.with_env("ENV", "test")
     container.with_env("PORT", "7018")
+    container.with_env("JWT_PUBLIC_KEY", "DEFAULT_PUBLIC_KEY")
     container.with_exposed_ports(7018)
 
     with container as c:
