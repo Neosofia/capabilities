@@ -42,6 +42,9 @@ ENV PATH="/app/.venv/bin:$PATH" \
 RUN python -m pytest -q
 
 FROM ${PYTHON_IMAGE} AS runtime
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN groupadd --system app \
     && useradd --system --gid app --create-home --home-dir /home/app app
