@@ -23,7 +23,6 @@ class Settings(BaseSettings):
     # JWT authentication settings
     jwt_public_key: str | None = Field(default=None)
     jwt_jwks_uri: str | None = Field(default=None)
-    jwt_issuer: str = Field(default="https://neosofia.com")
     jwt_audience: str | list[str] = Field(default="capabilities")
 
     # Rate limit settings

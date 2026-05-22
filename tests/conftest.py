@@ -24,7 +24,6 @@ _PUBLIC_PEM = _PUBLIC_KEY.public_bytes(
 )
 
 os.environ["JWT_PUBLIC_KEY"] = base64.b64encode(_PUBLIC_PEM).decode('utf-8')
-os.environ["JWT_ISSUER"] = "https://test.neosofia.com"
 os.environ["ENV"] = "test"
 
 from src.app import create_app  # noqa: E402 — must import after env vars are set

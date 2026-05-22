@@ -36,7 +36,6 @@ The machine-readable contract lives in `openapi.json`.
 | `GUNICORN_TIMEOUT` | integer | `30` | Gunicorn worker timeout in seconds. |
 | `GUNICORN_KEEPALIVE` | integer | `5` | Gunicorn keepalive in seconds. |
 | `JWT_JWKS_URI` | string | | JWKS URI for token validation. |
-| `JWT_ISSUER` | string | | Expected JWT issuer. |
 
 ## Testing
 
