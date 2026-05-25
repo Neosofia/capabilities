@@ -17,7 +17,7 @@
 3. Start the service locally:
 
    ```bash
-   PYTHONPATH=. uv run --dev -m gunicorn -c src/gunicorn.py src.app:app
+   uv run --dev -m gunicorn -c src/gunicorn.py src.app:app
    ```
 
 4. Check health:
