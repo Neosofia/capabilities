@@ -19,8 +19,7 @@ jobs:
     name: Vulnerability Scan
     uses: Neosofia/platform-workflows/.github/workflows/_scan.yml@main
     with:
-      policy_bundle_repository: Neosofia/cdp
-      policy_bundle_ref: cdp-ui-policies/v0.1.0
+      policy_bundle_context: tests/fixtures/policies
 
   build-push:
     name: Build & Push to GHCR
@@ -30,5 +29,4 @@ jobs:
       image_name: ghcr.io/${{ github.repository_owner }}/capabilities
       tag_prefix: capabilities
       cache_scope: capabilities
-      policy_bundle_repository: Neosofia/cdp
-      policy_bundle_ref: cdp-ui-policies/v0.1.0
+      policy_bundle_context: tests/fixtures/policies
