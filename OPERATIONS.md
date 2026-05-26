@@ -59,13 +59,21 @@ Local CDP development volume-mounts `cdp/policies/` over `/app/policies` instead
 
 ## Railway
 
-Production deploys pull the CI-built image from GHCR (`ghcr.io/neosofia/capabilities:vX.Y.Z` and `:latest`). Railway does **not** receive webhooks when GHCR images are published — redeploy explicitly after each release.
+Production deploys from the **capabilities** GitHub repo (Railway watches `main`). Railway waits for the **`service-ci`** check suite to pass before deploying.
 
-**Manual redeploy (immediate):** Railway → capabilities service → **Redeploy**, with image `ghcr.io/neosofia/capabilities:vX.Y.Z` (or `:latest` after the release workflow has run).
+After each green `main` push, Railway builds the Dockerfile (runtime stage), pulling the UI policy bundle from `ghcr.io/neosofia/cdp-ui-policies:v0.1.0`.
 
-**Automated redeploy (optional):** add repo secrets/variables and the `deploy-railway` job in `service-build-push.yml` will run `railway redeploy` after a green build:
+**Verify a deploy landed:**
 
-| Name | Type | Value |
-|------|------|-------|
-| `RAILWAY_TOKEN` | secret | Project token from Railway → Project Settings → Tokens |
-| `RAILWAY_SERVICE_ID` | variable | Service UUID from Railway service settings |
+```bash
+curl -s https://capabilities-production.up.railway.app/api/v1/capabilities
+# → {"namespaces":["ui"]}
+```
+
+Required Railway variables:
+
+| Variable | Example |
+|----------|---------|
+| `JWT_JWKS_URI` | `https://authentication.staging.neosofia.tech/.well-known/jwks.json` |
+| `JWT_AUDIENCE` | `capabilities` |
+| `FRONTEND_URL` | `https://staging.neosofia.tech` |
