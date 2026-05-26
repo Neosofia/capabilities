@@ -81,7 +81,7 @@ wheels = [
 
 [[package]]
 name = "capabilities"
-version = "0.5.0"
+version = "0.5.1"
 source = { editable = "." }
 dependencies = [
     { name = "authentication-in-the-middle" },
