@@ -18,7 +18,7 @@ This service is the platform **UI control plane**. It evaluates coarse `{ key: b
 
 For the architectural decision and roadmap, see [CDP ADR 0012](https://github.com/Neosofia/cdp/blob/main/architecture/adrs/0012-ui-capabilities-control-plane.md).
 
-Production images copy the bundle from a separate **`cdp-ui-policies`** image at build time (`POLICY_IMAGE` build arg, default `ghcr.io/neosofia/cdp-ui-policies:v0.1.0`) — the same pattern authentication uses for `sql-template`.
+Production images copy the bundle from **`cdp-ui-policies`** at build time (pinned in the Dockerfile) — the same pattern authentication uses for `sql-template`.
 
 ## Quickstart
 

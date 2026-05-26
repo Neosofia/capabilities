@@ -4,14 +4,12 @@
 #   docker build --target runtime -t capabilities:test .
 #
 # Production runtime copies the product UI policy bundle from a separate image
-# (same pattern as authentication + sql-template). Override at build time:
-#   docker build --build-arg POLICY_IMAGE=ghcr.io/neosofia/cdp-ui-policies:v0.1.0 .
+# (same pattern as authentication + sql-template).
 
 # cedarpy 4.8.1 needs the glibc manylinux wheel for attribute-based policy evaluation.
-ARG POLICY_IMAGE=ghcr.io/neosofia/cdp-ui-policies:v0.1.0
 ARG PYTHON_IMAGE=python:3.14-slim@sha256:2409290aa375de35f6492db84c700067d5c4c2aacfaf770c155d7528fb68bcf1
 
-FROM ${POLICY_IMAGE} AS policies
+FROM ghcr.io/neosofia/cdp-ui-policies:v0.1.0 AS policies
 
 FROM ${PYTHON_IMAGE} AS build-base
 

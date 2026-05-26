@@ -34,12 +34,10 @@
 
 ## Docker Build & Run
 
-Build the runtime image from the capabilities repository. Production images copy the UI policy bundle from a separate **`cdp-ui-policies`** image (`POLICY_IMAGE` build arg):
+Build the runtime image from the capabilities repository. Production images copy the UI policy bundle from **`cdp-ui-policies`** at build time (pinned in the Dockerfile, same pattern as authentication + `sql-template`):
 
 ```bash
-docker build --target runtime \
-  --build-arg POLICY_IMAGE=ghcr.io/neosofia/cdp-ui-policies:v0.1.0 \
-  -t capabilities:test .
+docker build --target runtime -t capabilities:test .
 ```
 
 Publish a local policy bundle for prod-like testing:

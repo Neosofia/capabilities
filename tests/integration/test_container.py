@@ -9,46 +9,14 @@ from testcontainers.core.container import DockerContainer
 pytestmark = pytest.mark.integration
 
 IMAGE_TAG = "capabilities-test:latest"
-POLICY_IMAGE_TAG = "capabilities-test-policies:local"
-
-
-def _build_policy_image(repo_root: str) -> None:
-    """Build a scratch policy bundle image for the runtime stage."""
-    policies_dir = os.path.join(repo_root, "tests/fixtures/policies")
-    subprocess.run(
-        [
-            "docker",
-            "build",
-            "-f",
-            os.path.join(policies_dir, "Dockerfile"),
-            "-t",
-            POLICY_IMAGE_TAG,
-            policies_dir,
-        ],
-        check=True,
-        stdout=subprocess.DEVNULL,
-    )
 
 
 @pytest.fixture(scope="session", autouse=True)
 def build_container_image():
     """Build the Docker image once per test session."""
     repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
-    policy_image = os.environ.get("POLICY_IMAGE", POLICY_IMAGE_TAG)
-    if policy_image == POLICY_IMAGE_TAG:
-        _build_policy_image(repo_root)
     subprocess.run(
-        [
-            "docker",
-            "build",
-            "--build-arg",
-            f"POLICY_IMAGE={policy_image}",
-            "--target",
-            "runtime",
-            "-t",
-            IMAGE_TAG,
-            ".",
-        ],
+        ["docker", "build", "--target", "runtime", "-t", IMAGE_TAG, "."],
         cwd=repo_root,
         check=True,
         stdout=subprocess.DEVNULL,
@@ -88,6 +56,3 @@ def test_container_health(app_container):
     res = requests.get(f"{app_container}/health")
     assert res.status_code == 200
     assert res.json() == {"status": "ok"}
-
-
-

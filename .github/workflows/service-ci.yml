@@ -25,5 +25,3 @@ jobs:
   scan:
     name: Vulnerability Scan
     uses: Neosofia/platform-workflows/.github/workflows/_scan.yml@main
-    with:
-      policy_bundle_context: tests/fixtures/policies
