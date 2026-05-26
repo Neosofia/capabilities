@@ -27,3 +27,15 @@ jobs:
       image_name: ghcr.io/${{ github.repository_owner }}/capabilities
       tag_prefix: capabilities
       cache_scope: capabilities
+
+  deploy-railway:
+    name: Deploy to Railway
+    needs: build-push
+    if: ${{ secrets.RAILWAY_TOKEN != '' && vars.RAILWAY_SERVICE_ID != '' }}
+    runs-on: ubuntu-latest
+    container: ghcr.io/railwayapp/cli:latest
+    env:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+    steps:
+      - name: Redeploy service
+        run: railway redeploy -y --service "${{ vars.RAILWAY_SERVICE_ID }}"

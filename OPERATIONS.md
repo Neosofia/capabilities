@@ -56,3 +56,16 @@ docker run -d --rm -p 8019:8019 \
 ```
 
 Local CDP development volume-mounts `cdp/policies/` over `/app/policies` instead (see CDP `docker-compose.dev.yml`).
+
+## Railway
+
+Production deploys pull the CI-built image from GHCR (`ghcr.io/neosofia/capabilities:vX.Y.Z` and `:latest`). Railway does **not** receive webhooks when GHCR images are published — redeploy explicitly after each release.
+
+**Manual redeploy (immediate):** Railway → capabilities service → **Redeploy**, with image `ghcr.io/neosofia/capabilities:vX.Y.Z` (or `:latest` after the release workflow has run).
+
+**Automated redeploy (optional):** add repo secrets/variables and the `deploy-railway` job in `service-build-push.yml` will run `railway redeploy` after a green build:
+
+| Name | Type | Value |
+|------|------|-------|
+| `RAILWAY_TOKEN` | secret | Project token from Railway → Project Settings → Tokens |
+| `RAILWAY_SERVICE_ID` | variable | Service UUID from Railway service settings |
