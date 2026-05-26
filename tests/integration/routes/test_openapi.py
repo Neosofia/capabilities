@@ -12,7 +12,8 @@ def test_openapi_spec_contains_core_paths():
 
     assert spec["openapi"] == "3.0.3"
     assert "/health" in spec["paths"]
-    assert "/api/v1/entitlements" in spec["paths"]
+    assert "/api/v1/capabilities" in spec["paths"]
+    assert "/api/v1/capabilities/{namespace}" in spec["paths"]
 
 
 def test_openapi_spec_defines_error_schema():

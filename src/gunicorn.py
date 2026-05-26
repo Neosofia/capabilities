@@ -1,3 +1,5 @@
+import sys
+
 from logenvelope.gunicorn import JSONLogger
 
 from src.bootstrap.config import settings
@@ -8,7 +10,11 @@ workers = settings.web_concurrency
 threads = settings.gunicorn_threads
 timeout = settings.gunicorn_timeout
 keepalive = settings.gunicorn_keepalive
-preload_app = True
+
+# cedarpy initialises native code that is not fork-safe on macOS when preloaded in the
+# master process. Load the app in workers instead for local development.
+preload_app = settings.env.lower() == "production" and sys.platform != "darwin"
+
 accesslog = "-"
 errorlog = "/dev/stdout"
 loglevel = settings.log_level

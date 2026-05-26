@@ -12,6 +12,7 @@ from src.bootstrap.extensions import limiter
 from src.bootstrap.logging_config import log_event, setup_logging
 from src.routes import health
 from src.routes.capabilities import init_routes
+from src.services.entitlements_manifest import load_entitlements_manifest
 
 def _http_error_name(status_code: int) -> str:
     return {400: "invalid_request", 404: "not_found", 405: "method_not_allowed", 413: "payload_too_large"}.get(status_code, "http_error")
@@ -45,9 +46,10 @@ def create_app(config: dict[str, Any] | None = None) -> Flask:
 
     policy_source = FilesystemPolicySetSource(settings.capabilities_policies_dir, cache_ttl=settings.capabilities_policy_cache_ttl)
     evaluator = CedarEvaluator(policy_source=policy_source)
+    entitlement_manifest = load_entitlements_manifest(settings.capabilities_policies_dir)
 
     app.register_blueprint(health.bp)
-    init_routes(app, evaluator)
+    init_routes(app, evaluator, entitlement_manifest)
 
     @app.errorhandler(HTTPException)
     def handle_http_exception(exc: HTTPException):

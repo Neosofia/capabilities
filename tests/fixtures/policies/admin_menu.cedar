@@ -1,8 +1,7 @@
 permit (
     principal is ui::User,
     action == Action::"View",
-    resource
+    resource == ui::Menu::"admin"
 ) when {
-    (resource == ui::Menu::"admin" || resource == ui::Menu::"debug") &&
     principal.roles.contains("admin")
 };

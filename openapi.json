@@ -23,12 +23,40 @@
         }
       }
     },
-    "/api/v1/entitlements": {
+    "/api/v1/capabilities": {
       "get": {
-        "operationId": "getEntitlements",
+        "operationId": "listCapabilityNamespaces",
         "responses": {
           "200": {
-            "description": "Authorized UI entitlements for the current principal",
+            "description": "Capability namespaces available in the loaded policy bundle",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CapabilityNamespacesResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/capabilities/{namespace}": {
+      "get": {
+        "operationId": "getCapabilities",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Cedar namespace for the principal (for example, ui)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authorized entitlements for the current principal in the requested namespace",
             "content": {
               "application/json": {
                 "schema": {
@@ -49,6 +77,16 @@
           },
           "403": {
             "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unknown capability namespace",
             "content": {
               "application/json": {
                 "schema": {
@@ -78,6 +116,19 @@
         "type": "object",
         "additionalProperties": {
           "type": "boolean"
+        }
+      },
+      "CapabilityNamespacesResponse": {
+        "type": "object",
+        "required": ["namespaces"],
+        "additionalProperties": false,
+        "properties": {
+          "namespaces": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
         }
       },
       "ErrorResponse": {

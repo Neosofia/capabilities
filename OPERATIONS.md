@@ -29,19 +29,32 @@
 5. Request entitlement evaluation:
 
    ```bash
-   curl -H "Authorization: Bearer <token>" -H "X-Active-Role: admin" http://localhost:8019/api/v1/entitlements
+   curl -H "Authorization: Bearer <token>" -H "X-Active-Role: admin" http://localhost:8019/api/v1/capabilities/ui
    ```
 
 ## Docker Build & Run
 
-In this monorepo, build from the repository root:
+Build the runtime image from the capabilities repository. Production images copy the UI policy bundle from a separate **`cdp-ui-policies`** image (`POLICY_IMAGE` build arg):
 
 ```bash
-docker build -f authorization/Dockerfile --target runtime -t authorization-service:test .
+docker build --target runtime \
+  --build-arg POLICY_IMAGE=ghcr.io/neosofia/cdp-ui-policies:v0.1.0 \
+  -t capabilities:test .
 ```
 
-Run the container locally with development settings:
+Publish a local policy bundle for prod-like testing:
 
 ```bash
-docker run -d --rm -p 8019:8019 -e ENV=development --env-file .env.example --name authorization-service-dev authorization-service:test
+docker build -f policies/Dockerfile -t cdp-ui-policies:local policies   # from CDP repo
 ```
+
+Run the container:
+
+```bash
+docker run -d --rm -p 8019:8019 \
+  -e ENV=development \
+  -e JWT_PUBLIC_KEY="$(base64 < public.pem)" \
+  --name capabilities-dev capabilities:test
+```
+
+Local CDP development volume-mounts `cdp/policies/` over `/app/policies` instead (see CDP `docker-compose.dev.yml`).

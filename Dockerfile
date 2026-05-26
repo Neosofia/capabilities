@@ -2,10 +2,16 @@
 # Build this from the service directory:
 #   docker build --target test .
 #   docker build --target runtime -t capabilities:test .
+#
+# Production runtime copies the product UI policy bundle from a separate image
+# (same pattern as authentication + sql-template). Override at build time:
+#   docker build --build-arg POLICY_IMAGE=ghcr.io/neosofia/cdp-ui-policies:v0.1.0 .
 
 # cedarpy 4.8.1 needs the glibc manylinux wheel for attribute-based policy evaluation.
-ARG PYTHON_IMAGE=python:3.14-slim@sha256:2409290aa375de35f6492db84c700067d5c4c2aacfaf770c155d7528fb68bcf1
+ARG POLICY_IMAGE=ghcr.io/neosofia/cdp-ui-policies:v0.1.0
+FROM ${POLICY_IMAGE} AS policies
 
+ARG PYTHON_IMAGE=python:3.14-slim@sha256:2409290aa375de35f6492db84c700067d5c4c2aacfaf770c155d7528fb68bcf1
 FROM ${PYTHON_IMAGE} AS build-base
 
 WORKDIR /app
@@ -33,14 +39,15 @@ FROM test-deps AS test
 
 COPY src ./src
 COPY tests ./tests
-COPY policies ./policies
 COPY openapi.json ./openapi.json
 
 ENV PATH="/app/.venv/bin:$PATH" \
-    PYTHONPATH="/app"
+    PYTHONPATH="/app" \
+    CAPABILITIES_POLICIES_DIR="/app/tests/fixtures/policies"
 
 RUN python -m pytest -q
 
+ARG PYTHON_IMAGE=python:3.14-slim@sha256:2409290aa375de35f6492db84c700067d5c4c2aacfaf770c155d7528fb68bcf1
 FROM ${PYTHON_IMAGE} AS runtime
 RUN apt-get update \
     && apt-get upgrade -y \
@@ -58,8 +65,10 @@ ENV PATH="/app/.venv/bin:$PATH" \
     PYTHONPATH="/app"
 
 COPY src ./src
-COPY policies ./policies
 COPY openapi.json ./openapi.json
+
+# Product UI policies (from cdp-ui-policies image; local dev may volume-mount over this path)
+COPY --from=policies /policies /app/policies
 
 EXPOSE 8019
 

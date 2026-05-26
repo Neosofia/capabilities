@@ -1,12 +1,14 @@
-import json
-import pytest
 import base64
+import json
 from pathlib import Path
-from cryptography.hazmat.primitives.asymmetric import rsa
+
+import pytest
 from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import rsa
 from jsonschema import validate
 from jsonschema.validators import _RefResolver
-import os
+
+from src.bootstrap.config import Settings
 
 # Generate keys at module load time so they exist before ANY test imports
 _PRIVATE_KEY = rsa.generate_private_key(public_exponent=65537, key_size=2048)
@@ -15,18 +17,51 @@ _PUBLIC_KEY = _PRIVATE_KEY.public_key()
 _PRIVATE_PEM = _PRIVATE_KEY.private_bytes(
     encoding=serialization.Encoding.PEM,
     format=serialization.PrivateFormat.PKCS8,
-    encryption_algorithm=serialization.NoEncryption()
+    encryption_algorithm=serialization.NoEncryption(),
 )
 
 _PUBLIC_PEM = _PUBLIC_KEY.public_bytes(
     encoding=serialization.Encoding.PEM,
-    format=serialization.PublicFormat.SubjectPublicKeyInfo
+    format=serialization.PublicFormat.SubjectPublicKeyInfo,
 )
 
-os.environ["JWT_PUBLIC_KEY"] = base64.b64encode(_PUBLIC_PEM).decode('utf-8')
-os.environ["ENV"] = "test"
+# Inject explicit test settings before the app (and its routes) are imported.
+# Route modules bind `settings` at import time, so this must precede `create_app`.
+import src.bootstrap.config as config_module
 
-from src.app import create_app  # noqa: E402 — must import after env vars are set
+config_module.settings = Settings(
+    env="test",
+    jwt_public_key=base64.b64encode(_PUBLIC_PEM).decode("utf-8"),
+    capabilities_policies_dir=Path(__file__).parent / "fixtures" / "policies",
+)
+
+from src.app import create_app  # noqa: E402
+
+
+def encode_test_access_token(
+    private_key,
+    *,
+    roles: list[str],
+    audience: str | list[str] = "capabilities",
+    sub: str = "user_123",
+) -> str:
+    import jwt
+    import time
+
+    now = int(time.time())
+    return jwt.encode(
+        {
+            "sub": sub,
+            "iss": "https://test.neosofia.com",
+            "aud": audience,
+            "roles": roles,
+            "iat": now,
+            "exp": now + 3600,
+        },
+        private_key,
+        algorithm="RS256",
+    )
+
 
 @pytest.fixture(scope="session")
 def rsa_keypair():
@@ -60,5 +95,5 @@ def validate_response():
             return
         resolver = _RefResolver.from_schema(spec)
         validate(instance=data, schema=schema, resolver=resolver)
-    return _validate
 
+    return _validate
