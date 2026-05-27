@@ -2,13 +2,12 @@ from typing import Any
 import traceback
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from flask_talisman import Talisman
 from werkzeug.exceptions import HTTPException
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from authorization_in_the_middle import CedarEvaluator, FilesystemPolicySetSource
 from src.bootstrap.config import settings
-from src.bootstrap.extensions import limiter
+from src.bootstrap.extensions import limiter, talisman
 from src.bootstrap.logging_config import log_event, setup_logging
 from src.routes import health
 from src.routes.capabilities import init_routes
@@ -41,7 +40,15 @@ def create_app(config: dict[str, Any] | None = None) -> Flask:
     if not is_dev and settings.trusted_proxy_hops > 0:
         app.wsgi_app = ProxyFix(app.wsgi_app, x_for=settings.trusted_proxy_hops, x_proto=settings.trusted_proxy_hops, x_host=settings.trusted_proxy_hops, x_prefix=settings.trusted_proxy_hops)
 
-    Talisman(app, force_https=not is_dev, strict_transport_security=not is_dev, strict_transport_security_max_age=31536000, strict_transport_security_include_subdomains=True, content_security_policy={"default-src": ["'none'"], "frame-ancestors": ["'none'"]}, referrer_policy="strict-origin-when-cross-origin")
+    talisman.init_app(
+        app,
+        force_https=not is_dev,
+        strict_transport_security=not is_dev,
+        strict_transport_security_max_age=31536000,
+        strict_transport_security_include_subdomains=True,
+        content_security_policy={"default-src": ["'none'"], "frame-ancestors": ["'none'"]},
+        referrer_policy="strict-origin-when-cross-origin",
+    )
     limiter.init_app(app)
 
     policy_source = FilesystemPolicySetSource(settings.capabilities_policies_dir, cache_ttl=settings.capabilities_policy_cache_ttl)
