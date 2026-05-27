@@ -57,23 +57,24 @@ docker run -d --rm -p 8019:8019 \
 
 Local CDP development volume-mounts `cdp/policies/` over `/app/policies` instead (see CDP `docker-compose.dev.yml`).
 
-## Railway
+## Public cloud deployment
 
-Production deploys from the **capabilities** GitHub repo (Railway watches `main`). Railway waits for the **`service-ci`** check suite to pass before deploying.
+Shared guidance — why local JWKS differs from cloud, two traffic planes, JWT audience coupling, healthcheck probes, operational gotchas, and a Railway staging example — lives in the infrastructure repo:
 
-After each green `main` push, Railway builds the Dockerfile (runtime stage), pulling the UI policy bundle from `ghcr.io/neosofia/cdp-ui-policies:v0.1.0`.
+**→ [public-cloud/OPERATIONS.md](https://github.com/Neosofia/infrastructure/blob/main/public-cloud/OPERATIONS.md)**
 
-**Verify a deploy landed:**
+### Capabilities-specific notes
+
+- **CI / deploy:** Railway watches `main`; waits for **`service-ci`** before deploy. Runtime image pulls UI policies from `ghcr.io/neosofia/cdp-ui-policies:v0.1.0` at build time.
+- **Local JWKS:** `JWT_JWKS_URI=http://authentication:8014/.well-known/jwks.json` (see CDP `.capabilities.env.sample`).
+- **Cloud JWKS audience:** `JWT_AUDIENCE=capabilities`; authentication must list `capabilities` in `JWT_WEB_AUDIENCE`.
+- **Healthcheck:** `/health` exempt from Talisman HTTPS redirect since **v0.5.8+**.
+- **Verify:**
 
 ```bash
-curl -s https://capabilities-production.up.railway.app/api/v1/capabilities
-# → {"namespaces":["ui"]}
+curl -s https://<capabilities-host>/health
+curl -s https://<capabilities-host>/api/v1/capabilities
+curl -s -H "Authorization: Bearer <token>" -H "X-Active-Role: admin" \
+  https://<capabilities-host>/api/v1/capabilities/ui
 ```
 
-Required Railway variables:
-
-| Variable | Example |
-|----------|---------|
-| `JWT_JWKS_URI` | `https://authentication.staging.neosofia.tech/.well-known/jwks.json` |
-| `JWT_AUDIENCE` | `capabilities` |
-| `FRONTEND_URL` | `https://staging.neosofia.tech` |
