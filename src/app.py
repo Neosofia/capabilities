@@ -20,7 +20,7 @@ def _http_error_name(status_code: int) -> str:
 def create_app(config: dict[str, Any] | None = None) -> Flask:
     setup_logging(settings.service_name, settings.log_level)
     app = Flask(__name__)
-    CORS(app, origins=[settings.frontend_url], supports_credentials=True)
+    CORS(app, origins=[settings.frontend_url], supports_credentials=True, max_age=86400)
     if config:
         app.config.update(config)
     app.config.setdefault("MAX_CONTENT_LENGTH", settings.max_content_length)

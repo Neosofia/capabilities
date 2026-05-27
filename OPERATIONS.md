@@ -69,6 +69,7 @@ Shared guidance — why local JWKS differs from cloud, two traffic planes, JWT a
 - **Local JWKS:** `JWT_JWKS_URI=http://authentication:8014/.well-known/jwks.json` (see CDP `.capabilities.env.sample`).
 - **Cloud JWKS audience:** `JWT_AUDIENCE=capabilities`; authentication must list `capabilities` in `JWT_WEB_AUDIENCE`.
 - **Healthcheck:** `/health` exempt from Talisman HTTPS redirect since **v0.5.8+**.
+- **CORS preflight cache:** OPTIONS responses include `Access-Control-Max-Age: 86400` (24 h; Chrome caps at 2 h) so browsers cache cross-origin preflights.
 - **Verify:**
 
 ```bash
