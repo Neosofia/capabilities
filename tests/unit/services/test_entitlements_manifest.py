@@ -16,12 +16,12 @@ def test_load_entitlements_manifest_reads_fixture_bundle():
 
     assert manifest.namespace_names == ["ui"]
     assert [item.key for item in definitions] == [
-        "ui:menu:admin",
+        "ui:menu:operator",
         "ui:menu:debug",
         "ui:menu:patient",
         "ui:menu:clinician",
     ]
-    assert definitions[0].resource == 'ui::Menu::"admin"'
+    assert definitions[0].resource == 'ui::Menu::"operator"'
     assert definitions[0].action == "View"
 
 
@@ -57,8 +57,8 @@ def test_load_entitlements_manifest_rejects_duplicate_keys(tmp_path: Path):
                 "namespaces": {
                     "ui": {
                         "entitlements": [
-                            {"key": "ui:menu:admin", "resource": 'ui::Menu::"admin"'},
-                            {"key": "ui:menu:admin", "resource": 'ui::Menu::"debug"'},
+                            {"key": "ui:menu:operator", "resource": 'ui::Menu::"operator"'},
+                            {"key": "ui:menu:operator", "resource": 'ui::Menu::"debug"'},
                         ]
                     }
                 }

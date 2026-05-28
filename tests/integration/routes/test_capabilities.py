@@ -13,8 +13,8 @@ def test_list_capability_namespaces(client, api_spec, validate_response):
     assert response.json == {"namespaces": ["ui"]}
 
 
-def test_admin_can_see_admin_menu(client, rsa_keypair, api_spec, validate_response):
-    token = encode_test_access_token(rsa_keypair["private"], roles=["admin"])
+def test_operator_can_see_operator_menu(client, rsa_keypair, api_spec, validate_response):
+    token = encode_test_access_token(rsa_keypair["private"], roles=["operator"])
     response = client.get(
         "/api/v1/capabilities/ui",
         headers={"Authorization": f"Bearer {token}"},
@@ -23,7 +23,7 @@ def test_admin_can_see_admin_menu(client, rsa_keypair, api_spec, validate_respon
     assert response.status_code == 200
     validate_response(api_spec, "/api/v1/capabilities/{namespace}", "get", 200, response.get_json())
     data = response.json
-    assert data["ui:menu:admin"] is True
+    assert data["ui:menu:operator"] is True
     assert data["ui:menu:debug"] is True
     assert data["ui:menu:patient"] is False
     assert data["ui:menu:clinician"] is False
@@ -39,7 +39,7 @@ def test_clinician_can_see_clinician_menu(client, rsa_keypair, api_spec, validat
     assert response.status_code == 200
     validate_response(api_spec, "/api/v1/capabilities/{namespace}", "get", 200, response.get_json())
     data = response.json
-    assert data["ui:menu:admin"] is False
+    assert data["ui:menu:operator"] is False
     assert data["ui:menu:debug"] is False
     assert data["ui:menu:patient"] is False
     assert data["ui:menu:clinician"] is True
@@ -55,7 +55,7 @@ def test_patient_can_see_patient_menu(client, rsa_keypair, api_spec, validate_re
     assert response.status_code == 200
     validate_response(api_spec, "/api/v1/capabilities/{namespace}", "get", 200, response.get_json())
     data = response.json
-    assert data["ui:menu:admin"] is False
+    assert data["ui:menu:operator"] is False
     assert data["ui:menu:debug"] is False
     assert data["ui:menu:patient"] is True
     assert data["ui:menu:clinician"] is False
@@ -64,7 +64,7 @@ def test_patient_can_see_patient_menu(client, rsa_keypair, api_spec, validate_re
 def test_accepts_authenticated_audience(client, rsa_keypair):
     token = encode_test_access_token(
         rsa_keypair["private"],
-        roles=["admin"],
+        roles=["operator"],
         audience=["authentication", "capabilities"],
     )
     response = client.get(
@@ -73,23 +73,23 @@ def test_accepts_authenticated_audience(client, rsa_keypair):
     )
 
     assert response.status_code == 200
-    assert response.json["ui:menu:admin"] is True
+    assert response.json["ui:menu:operator"] is True
 
 
 def test_multiple_roles_with_active_role(client, rsa_keypair):
-    token = encode_test_access_token(rsa_keypair["private"], roles=["admin", "clinician"])
+    token = encode_test_access_token(rsa_keypair["private"], roles=["operator", "clinician"])
 
     response = client.get(
         "/api/v1/capabilities/ui",
-        headers={"Authorization": f"Bearer {token}", "X-Active-Role": "admin"},
+        headers={"Authorization": f"Bearer {token}", "X-Active-Role": "operator"},
     )
     assert response.status_code == 200
-    assert response.json["ui:menu:admin"] is True
+    assert response.json["ui:menu:operator"] is True
 
     response = client.get(
         "/api/v1/capabilities/ui",
         headers={"Authorization": f"Bearer {token}", "X-Active-Role": "clinician"},
     )
     assert response.status_code == 200
-    assert response.json["ui:menu:admin"] is False
+    assert response.json["ui:menu:operator"] is False
     assert response.json["ui:menu:clinician"] is True

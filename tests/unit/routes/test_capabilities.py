@@ -12,7 +12,7 @@ def test_unauthorized_without_token(client):
 
 
 def test_unknown_namespace_returns_not_found(client, rsa_keypair):
-    token = encode_test_access_token(rsa_keypair["private"], roles=["admin"])
+    token = encode_test_access_token(rsa_keypair["private"], roles=["operator"])
     response = client.get(
         "/api/v1/capabilities/unknown",
         headers={"Authorization": f"Bearer {token}"},
@@ -22,7 +22,7 @@ def test_unknown_namespace_returns_not_found(client, rsa_keypair):
 
 
 def test_multiple_roles_without_active_role_returns_bad_request(client, rsa_keypair):
-    token = encode_test_access_token(rsa_keypair["private"], roles=["admin", "clinician"])
+    token = encode_test_access_token(rsa_keypair["private"], roles=["operator", "clinician"])
     response = client.get(
         "/api/v1/capabilities/ui",
         headers={"Authorization": f"Bearer {token}"},

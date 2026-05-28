@@ -29,7 +29,7 @@
 5. Request entitlement evaluation:
 
    ```bash
-   curl -H "Authorization: Bearer <token>" -H "X-Active-Role: admin" http://localhost:8019/api/v1/capabilities/ui
+   curl -H "Authorization: Bearer <token>" -H "X-Active-Role: operator" http://localhost:8019/api/v1/capabilities/ui
    ```
 
 ## Docker Build & Run
@@ -65,7 +65,7 @@ Shared guidance — why local JWKS differs from cloud, two traffic planes, JWT a
 
 ### Capabilities-specific notes
 
-- **CI / deploy:** Railway watches `main`; waits for **`service-ci`** before deploy. Runtime image pulls UI policies from `ghcr.io/neosofia/cdp-ui-policies:v0.1.0` at build time.
+- **CI / deploy:** Railway watches `main`; waits for **`service-ci`** before deploy. Runtime image pulls UI policies from `ghcr.io/neosofia/cdp-ui-policies:v0.1.1` at build time.
 - **Local JWKS:** `JWT_JWKS_URI=http://authentication:8014/.well-known/jwks.json` (see CDP `.capabilities.env.sample`).
 - **Cloud JWKS audience:** `JWT_AUDIENCE=capabilities`; authentication must list `capabilities` in `JWT_WEB_AUDIENCE`.
 - **Healthcheck:** `/health` exempt from Talisman HTTPS redirect since **v0.5.8+**.
@@ -75,7 +75,7 @@ Shared guidance — why local JWKS differs from cloud, two traffic planes, JWT a
 ```bash
 curl -s https://<capabilities-host>/health
 curl -s https://<capabilities-host>/api/v1/capabilities
-curl -s -H "Authorization: Bearer <token>" -H "X-Active-Role: admin" \
+curl -s -H "Authorization: Bearer <token>" -H "X-Active-Role: operator" \
   https://<capabilities-host>/api/v1/capabilities/ui
 ```
 

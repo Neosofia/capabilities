@@ -4,21 +4,21 @@ policies = """
 permit(
     principal == ui::User::"user_123",
     action == Action::"View",
-    resource == ui::Menu::"admin"
+    resource == ui::Menu::"operator"
 );
 """
 
 req = {
     "principal": 'ui::User::"user_123"',
     "action": 'Action::"View"',
-    "resource": 'ui::Menu::"admin"',
+    "resource": 'ui::Menu::"operator"',
     "context": {}
 }
 
 principal_entity = {
     "uid": 'ui::User::"user_123"',
     "attrs": {
-        "roles": [{"__extn": {"fn": "Set", "arg": ["admin"]}}]
+        "roles": [{"__extn": {"fn": "Set", "arg": ["operator"]}}]
     },
     "parents": []
 }
