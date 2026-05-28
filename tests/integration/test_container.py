@@ -6,7 +6,7 @@ import pytest
 import requests
 from testcontainers.core.container import DockerContainer
 
-pytestmark = pytest.mark.integration
+pytestmark = [pytest.mark.integration, pytest.mark.slow]
 
 IMAGE_TAG = "capabilities-test:latest"
 
