@@ -4,7 +4,6 @@ Lightweight capabilities service for UI entitlement evaluation using Cedar.
 
 Product deployments inject a policy bundle at runtime (for example, CDP mounts `cdp/policies/` locally, or production copies from the `cdp-ui-policies` image at build time). The bundle must include:
 
-- `schema.cedar.json`
 - `entitlements.json` — maps API keys to Cedar resources/actions, grouped by namespace
 - one or more `*.cedar` policy files
 
@@ -45,7 +44,7 @@ The machine-readable contract lives in `openapi.json`.
 | `LOG_LEVEL` | string | `info` | Minimum structured log severity. |
 | `PORT` | integer | `8019` | HTTP listener port. |
 | `TRUSTED_PROXY_HOPS` | integer | `0` | Number of trusted reverse proxies for `ProxyFix`. |
-| `CAPABILITIES_POLICIES_DIR` | path | `policies` | Directory containing Cedar policy files, `schema.cedar.json`, and `entitlements.json`. |
+| `CAPABILITIES_POLICIES_DIR` | path | `policies` | Directory containing Cedar policy files (`*.cedar`) and `entitlements.json`. |
 | `CAPABILITIES_POLICY_CACHE_TTL` | integer | `60` | Seconds to cache the loaded policy bundle in process. |
 | `MAX_CONTENT_LENGTH` | integer | `16384` | Maximum accepted request body size in bytes. |
 | `RATELIMIT_STORAGE_URI` | string | `memory://` | Rate-limit backend. Use Redis in multi-replica deployments. |
