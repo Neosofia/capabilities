@@ -65,7 +65,7 @@ Shared guidance — why local JWKS differs from cloud, two traffic planes, JWT a
 
 ### Capabilities-specific notes
 
-- **CI / deploy:** Railway watches `main`; waits for **`service-ci`** before deploy. Runtime image pulls UI policies from `ghcr.io/neosofia/cdp-ui-policies:v0.1.1` at build time.
+- **CI / deploy:** Railway watches `main`; waits for **`service-ci`** before deploy. Runtime image pulls UI policies from `ghcr.io/neosofia/cdp-ui-policies:v0.1.2` at build time.
 - **Local JWKS:** `JWT_JWKS_URI=http://authentication:8014/.well-known/jwks.json` (see CDP `.capabilities.env.sample`).
 - **Cloud JWKS audience:** `JWT_AUDIENCE=capabilities`; authentication must list `capabilities` in `JWT_WEB_AUDIENCE`.
 - **Healthcheck:** `/health` exempt from Talisman HTTPS redirect since **v0.5.8+**.
