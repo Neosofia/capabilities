@@ -12,7 +12,7 @@ def test_unauthorized_without_token(client):
 
 
 def test_unknown_namespace_returns_not_found(client, rsa_keypair):
-    token = encode_test_access_token(rsa_keypair["private"], roles=["operator"])
+    token = encode_test_access_token(rsa_keypair["private"], actors=["operator"])
     response = client.get(
         "/api/v1/capabilities/unknown",
         headers={"Authorization": f"Bearer {token}"},
@@ -21,8 +21,8 @@ def test_unknown_namespace_returns_not_found(client, rsa_keypair):
     assert response.status_code == 404
 
 
-def test_multiple_roles_without_active_role_returns_bad_request(client, rsa_keypair):
-    token = encode_test_access_token(rsa_keypair["private"], roles=["operator", "clinician"])
+def test_multiple_actors_without_active_actor_returns_bad_request(client, rsa_keypair):
+    token = encode_test_access_token(rsa_keypair["private"], actors=["operator", "clinician"])
     response = client.get(
         "/api/v1/capabilities/ui",
         headers={"Authorization": f"Bearer {token}"},

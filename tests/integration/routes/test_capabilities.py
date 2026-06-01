@@ -14,7 +14,7 @@ def test_list_capability_namespaces(client, api_spec, validate_response):
 
 
 def test_operator_can_see_operator_menu(client, rsa_keypair, api_spec, validate_response):
-    token = encode_test_access_token(rsa_keypair["private"], roles=["operator"])
+    token = encode_test_access_token(rsa_keypair["private"], actors=["operator"])
     response = client.get(
         "/api/v1/capabilities/ui",
         headers={"Authorization": f"Bearer {token}"},
@@ -30,7 +30,7 @@ def test_operator_can_see_operator_menu(client, rsa_keypair, api_spec, validate_
 
 
 def test_clinician_can_see_clinician_menu(client, rsa_keypair, api_spec, validate_response):
-    token = encode_test_access_token(rsa_keypair["private"], roles=["clinician"])
+    token = encode_test_access_token(rsa_keypair["private"], actors=["clinician"])
     response = client.get(
         "/api/v1/capabilities/ui",
         headers={"Authorization": f"Bearer {token}"},
@@ -46,7 +46,7 @@ def test_clinician_can_see_clinician_menu(client, rsa_keypair, api_spec, validat
 
 
 def test_patient_can_see_patient_menu(client, rsa_keypair, api_spec, validate_response):
-    token = encode_test_access_token(rsa_keypair["private"], roles=["patient"])
+    token = encode_test_access_token(rsa_keypair["private"], actors=["patient"])
     response = client.get(
         "/api/v1/capabilities/ui",
         headers={"Authorization": f"Bearer {token}"},
@@ -64,7 +64,7 @@ def test_patient_can_see_patient_menu(client, rsa_keypair, api_spec, validate_re
 def test_accepts_authenticated_audience(client, rsa_keypair):
     token = encode_test_access_token(
         rsa_keypair["private"],
-        roles=["operator"],
+        actors=["operator"],
         audience=["authentication", "capabilities"],
     )
     response = client.get(
@@ -76,19 +76,19 @@ def test_accepts_authenticated_audience(client, rsa_keypair):
     assert response.json["ui:menu:operator"] is True
 
 
-def test_multiple_roles_with_active_role(client, rsa_keypair):
-    token = encode_test_access_token(rsa_keypair["private"], roles=["operator", "clinician"])
+def test_multiple_actors_with_active_actor(client, rsa_keypair):
+    token = encode_test_access_token(rsa_keypair["private"], actors=["operator", "clinician"])
 
     response = client.get(
         "/api/v1/capabilities/ui",
-        headers={"Authorization": f"Bearer {token}", "X-Active-Role": "operator"},
+        headers={"Authorization": f"Bearer {token}", "X-Active-Actor": "operator"},
     )
     assert response.status_code == 200
     assert response.json["ui:menu:operator"] is True
 
     response = client.get(
         "/api/v1/capabilities/ui",
-        headers={"Authorization": f"Bearer {token}", "X-Active-Role": "clinician"},
+        headers={"Authorization": f"Bearer {token}", "X-Active-Actor": "clinician"},
     )
     assert response.status_code == 200
     assert response.json["ui:menu:operator"] is False

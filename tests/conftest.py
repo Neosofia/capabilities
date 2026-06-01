@@ -41,7 +41,8 @@ from src.app import create_app  # noqa: E402
 def encode_test_access_token(
     private_key,
     *,
-    roles: list[str],
+    actors: list[str],
+    org_roles: list[str] | None = None,
     audience: str | list[str] = "capabilities",
     sub: str = "user_123",
 ) -> str:
@@ -49,18 +50,17 @@ def encode_test_access_token(
     import time
 
     now = int(time.time())
-    return jwt.encode(
-        {
-            "sub": sub,
-            "iss": "https://test.neosofia.com",
-            "aud": audience,
-            "roles": roles,
-            "iat": now,
-            "exp": now + 3600,
-        },
-        private_key,
-        algorithm="RS256",
-    )
+    payload: dict = {
+        "sub": sub,
+        "iss": "https://test.neosofia.com",
+        "aud": audience,
+        "neosofia:actors": actors,
+        "iat": now,
+        "exp": now + 3600,
+    }
+    if org_roles:
+        payload["neosofia:roles"] = org_roles
+    return jwt.encode(payload, private_key, algorithm="RS256")
 
 
 @pytest.fixture(scope="session")
