@@ -5,7 +5,7 @@ from flask_cors import CORS
 from werkzeug.exceptions import HTTPException
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-from authentication_in_the_middle.actors import parse_tier1_actor_classes
+from authentication_in_the_middle.actors import configure_tier1_actor_classes
 from authorization_in_the_middle import CedarEvaluator, FilesystemPolicySetSource
 from src.bootstrap.config import settings
 from src.bootstrap.extensions import limiter, talisman
@@ -27,13 +27,11 @@ def create_app(config: dict[str, Any] | None = None) -> Flask:
     app.config.setdefault("MAX_CONTENT_LENGTH", settings.max_content_length)
     app.config.setdefault("JWT_PUBLIC_KEY", settings.jwt_public_key)
     app.config.setdefault("JWT_AUDIENCE", settings.jwt_audience)
-    app.config.setdefault(
-        "TIER1_ACTOR_CLASSES",
-        parse_tier1_actor_classes(settings.valid_actors),
-    )
     app.config.setdefault("SERVICE_NAME", settings.service_name)
     if hasattr(settings, "jwt_jwks_uri"):
         app.config.setdefault("JWT_JWKS_URI", settings.jwt_jwks_uri)
+    app.config.setdefault("ENV", settings.env)
+    configure_tier1_actor_classes(app)
 
     if not settings.jwt_public_key and not settings.jwt_jwks_uri:
         raise RuntimeError(

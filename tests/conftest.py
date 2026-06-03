@@ -1,9 +1,6 @@
 import base64
 import json
-import os
 from pathlib import Path
-
-os.environ.setdefault("VALID_ACTORS", "operator,clinician,patient")
 
 import pytest
 from cryptography.hazmat.primitives import serialization
@@ -35,8 +32,9 @@ import src.bootstrap.config as config_module
 config_module.settings = Settings(
     env="test",
     jwt_public_key=base64.b64encode(_PUBLIC_PEM).decode("utf-8"),
+    jwt_jwks_uri=None,
+    jwt_audience="capabilities",
     capabilities_policies_dir=Path(__file__).parent / "fixtures" / "policies",
-    valid_actors="operator,clinician,patient",
 )
 
 from src.app import create_app  # noqa: E402
@@ -71,7 +69,15 @@ def rsa_keypair():
 
 @pytest.fixture
 def app():
-    application = create_app({"TESTING": True})
+    application = create_app(
+        {
+            "TESTING": True,
+            "TIER1_ACTOR_CLASSES": frozenset({"operator", "study", "clinician", "patient"}),
+            "JWT_JWKS_URI": None,
+            "JWT_PUBLIC_KEY": _PUBLIC_PEM.decode("utf-8"),
+            "JWT_AUDIENCE": "capabilities",
+        }
+    )
     return application
 
 
