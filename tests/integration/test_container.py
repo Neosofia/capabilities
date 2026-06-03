@@ -9,6 +9,7 @@ from testcontainers.core.container import DockerContainer
 pytestmark = [pytest.mark.integration, pytest.mark.slow]
 
 IMAGE_TAG = "capabilities-test:latest"
+SERVICE_PORT = 8019
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -29,26 +30,34 @@ def app_container():
     """Spin up the built image and wait for the health endpoint to respond."""
     container = DockerContainer(IMAGE_TAG)
     container.with_env("ENV", "test")
-    container.with_env("PORT", "7018")
+    container.with_env("PORT", str(SERVICE_PORT))
+    container.with_env("VALID_ACTORS", "operator,clinician,patient")
     container.with_env("JWT_PUBLIC_KEY", "DEFAULT_PUBLIC_KEY")
-    container.with_exposed_ports(7018)
+    container.with_exposed_ports(SERVICE_PORT)
 
     with container as c:
-        port = c.get_exposed_port(7018)
+        port = c.get_exposed_port(SERVICE_PORT)
         host = c.get_container_host_ip()
-        url = f"http://{host}:{port}/health"
+        base_url = f"http://{host}:{port}"
+        health_url = f"{base_url}/health"
 
         start = time.time()
-        while time.time() - start < 30:
+        ready = False
+        while time.time() - start < 60:
             try:
-                if requests.get(url, timeout=1).status_code == 200:
+                res = requests.get(health_url, timeout=1)
+                if res.status_code == 200:
+                    ready = True
                     break
             except requests.exceptions.RequestException:
                 time.sleep(0.5)
-        else:
-            pytest.fail("Container did not become ready in time.")
+        if not ready:
+            logs = c.get_wrapped_container().logs(tail=50)
+            pytest.fail(
+                "Container did not become ready in time.\n" + logs.decode("utf-8", errors="replace")
+            )
 
-        yield f"http://{host}:{port}"
+        yield base_url
 
 
 def test_container_health(app_container):
