@@ -24,6 +24,9 @@ class Settings(BaseSettings):
     jwt_public_key: str | None = Field(default=None)
     jwt_jwks_uri: str | None = Field(default=None)
     jwt_audience: str | list[str] = Field(default="capabilities")
+    valid_actors: str = Field(
+        description="Comma-separated Tier-1 actor classes (must match Authentication VALID_ACTORS)",
+    )
 
     # Rate limit settings
     rate_limit_storage_uri: str = "memory://"

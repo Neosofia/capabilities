@@ -1,6 +1,9 @@
 import base64
 import json
+import os
 from pathlib import Path
+
+os.environ.setdefault("VALID_ACTORS", "operator,clinician,patient")
 
 import pytest
 from cryptography.hazmat.primitives import serialization
@@ -33,6 +36,7 @@ config_module.settings = Settings(
     env="test",
     jwt_public_key=base64.b64encode(_PUBLIC_PEM).decode("utf-8"),
     capabilities_policies_dir=Path(__file__).parent / "fixtures" / "policies",
+    valid_actors="operator,clinician,patient",
 )
 
 from src.app import create_app  # noqa: E402
@@ -42,7 +46,6 @@ def encode_test_access_token(
     private_key,
     *,
     actors: list[str],
-    org_roles: list[str] | None = None,
     audience: str | list[str] = "capabilities",
     sub: str = "user_123",
 ) -> str:
@@ -58,8 +61,6 @@ def encode_test_access_token(
         "iat": now,
         "exp": now + 3600,
     }
-    if org_roles:
-        payload["neosofia:roles"] = org_roles
     return jwt.encode(payload, private_key, algorithm="RS256")
 
 
