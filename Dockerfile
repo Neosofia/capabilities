@@ -62,6 +62,7 @@ ENV PATH="/app/.venv/bin:$PATH" \
     PYTHONUNBUFFERED=1 \
     PYTHONPATH="/app"
 
+COPY pyproject.toml ./pyproject.toml
 COPY src ./src
 COPY openapi.json ./openapi.json
 

@@ -103,12 +103,16 @@
     "schemas": {
       "HealthResponse": {
         "type": "object",
-        "required": ["status"],
+        "required": ["status", "version"],
         "additionalProperties": false,
         "properties": {
           "status": {
             "type": "string",
             "enum": ["ok"]
+          },
+          "version": {
+            "type": "string",
+            "description": "Service semver from pyproject at install/build time."
           }
         }
       },

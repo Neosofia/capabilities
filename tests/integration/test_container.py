@@ -63,4 +63,6 @@ def test_container_health(app_container):
     """Container starts and the health endpoint returns 200."""
     res = requests.get(f"{app_container}/health")
     assert res.status_code == 200
-    assert res.json() == {"status": "ok"}
+    body = res.json()
+    assert body["status"] == "ok"
+    assert body.get("version")

@@ -1,4 +1,5 @@
 import pytest
+from importlib.metadata import version
 
 from src.app import create_app
 from src.bootstrap.config import Settings
@@ -21,7 +22,10 @@ def test_health_allows_plain_http_in_production(rsa_keypair):
         response = create_app().test_client().get("/health")
         assert response.status_code == 200
         assert response.headers.get("Location") is None
-        assert response.get_json() == {"status": "ok"}
+        assert response.get_json() == {
+            "status": "ok",
+            "version": version("capabilities"),
+        }
     finally:
         config_module.settings = original
 
