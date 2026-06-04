@@ -71,6 +71,7 @@ pythonpath = ["."]
 
 [tool.coverage.run]
 omit = [
+    "scripts/*",
     "src/gunicorn*.py",
     "src/bootstrap/config.py",
 ]
