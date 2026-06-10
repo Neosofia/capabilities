@@ -56,8 +56,8 @@ requires-dist = [
 
 [[package]]
 name = "authorization-in-the-middle"
-version = "0.4.22"
-source = { url = "https://github.com/Neosofia/sdk/releases/download/authorization-in-the-middle/v0.4.22/authorization_in_the_middle-0.4.22-py3-none-any.whl" }
+version = "0.4.23"
+source = { url = "https://github.com/Neosofia/sdk/releases/download/authorization-in-the-middle/v0.4.23/authorization_in_the_middle-0.4.23-py3-none-any.whl" }
 dependencies = [
     { name = "cedarpy" },
     { name = "flask" },
@@ -65,7 +65,7 @@ dependencies = [
     { name = "logenvelope" },
 ]
 wheels = [
-    { url = "https://github.com/Neosofia/sdk/releases/download/authorization-in-the-middle/v0.4.22/authorization_in_the_middle-0.4.22-py3-none-any.whl", hash = "sha256:056b85aabfeaa658e2e1ba7842702bb0b88ce7505b86e78e3f69544f16deab1f" },
+    { url = "https://github.com/Neosofia/sdk/releases/download/authorization-in-the-middle/v0.4.23/authorization_in_the_middle-0.4.23-py3-none-any.whl", hash = "sha256:b375d432f91f2e8aab935b8975f0f71e527b8ad517edc4d7fe2d2b68e9bd1deb" },
 ]
 
 [package.metadata]
@@ -87,7 +87,7 @@ wheels = [
 
 [[package]]
 name = "capabilities"
-version = "0.5.13"
+version = "0.6.0"
 source = { editable = "." }
 dependencies = [
     { name = "authentication-in-the-middle" },
@@ -118,7 +118,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "authentication-in-the-middle", url = "https://github.com/Neosofia/sdk/releases/download/authentication-in-the-middle/v0.9.8/authentication_in_the_middle-0.9.8-py3-none-any.whl" },
-    { name = "authorization-in-the-middle", url = "https://github.com/Neosofia/sdk/releases/download/authorization-in-the-middle/v0.4.22/authorization_in_the_middle-0.4.22-py3-none-any.whl" },
+    { name = "authorization-in-the-middle", url = "https://github.com/Neosofia/sdk/releases/download/authorization-in-the-middle/v0.4.23/authorization_in_the_middle-0.4.23-py3-none-any.whl" },
     { name = "flask", specifier = ">=3.0.0" },
     { name = "flask-cors", specifier = ">=6.0.2" },
     { name = "flask-limiter", specifier = ">=3.5.0" },
