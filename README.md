@@ -2,7 +2,7 @@
 
 Lightweight capabilities service for UI entitlement evaluation using Cedar.
 
-Product deployments inject a policy bundle at runtime (for example, CDP mounts `cdp/policies/` locally, or production copies from the `cdp-ui-policies` image at build time). The bundle must include:
+Product deployments inject a policy bundle at runtime (for example, CDP mounts `cdp/policies/capabilities/` locally, or production copies from the `cdp-policies` image at build time). The bundle must include:
 
 - `entitlements.json` — maps API keys to Cedar resources/actions, grouped by namespace
 - one or more `*.cedar` policy files
@@ -17,7 +17,7 @@ This service is the platform **UI control plane**. It evaluates coarse `{ key: b
 
 For the architectural decision and roadmap, see [CDP ADR 0012](https://github.com/Neosofia/cdp/blob/main/architecture/adrs/0012-ui-capabilities-control-plane.md).
 
-Production images copy the bundle from **`cdp-ui-policies`** at build time (pinned in the Dockerfile) — the same pattern authentication uses for `sql-template`.
+Production images copy the capabilities bundle from **`cdp-policies`** at build time (pinned in the Dockerfile) — the same pattern authentication uses for `sql-template`.
 
 ## Quickstart
 

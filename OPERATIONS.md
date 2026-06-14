@@ -34,7 +34,7 @@
 
 ## Docker Build & Run
 
-Build the runtime image from the capabilities repository. Production images copy the UI policy bundle from **`cdp-ui-policies`** at build time (pinned in the Dockerfile, same pattern as authentication + `sql-template`):
+Build the runtime image from the capabilities repository. Production images copy the UI policy bundle from **`cdp-policies`** at build time (pinned in the Dockerfile, same pattern as authentication + `sql-template`):
 
 ```bash
 docker build --target runtime -t capabilities:test .
@@ -43,7 +43,7 @@ docker build --target runtime -t capabilities:test .
 Publish a local policy bundle for prod-like testing:
 
 ```bash
-docker build -f policies/Dockerfile -t cdp-ui-policies:local policies   # from CDP repo
+docker build -f policies/Dockerfile -t cdp-policies:local policies   # from CDP repo
 ```
 
 Run the container:
@@ -55,7 +55,7 @@ docker run -d --rm -p 8019:8019 \
   --name capabilities-dev capabilities:test
 ```
 
-Local CDP development volume-mounts `cdp/policies/` over `/app/policies` instead (see CDP `docker-compose.dev.yml`).
+Local CDP development volume-mounts `cdp/policies/capabilities/` over `/app/policies` instead (see CDP `docker-compose.dev.yml`).
 
 ## Public cloud deployment
 
@@ -65,7 +65,7 @@ Shared guidance — why local JWKS differs from cloud, two traffic planes, JWT a
 
 ### Capabilities-specific notes
 
-- **CI / deploy:** Railway watches `main`; waits for **`service-ci`** before deploy. Runtime image pulls UI policies from `ghcr.io/neosofia/cdp-ui-policies:v0.1.2` at build time.
+- **CI / deploy:** Railway watches `main`; waits for **`service-ci`** before deploy. Runtime image pulls UI policies from `ghcr.io/neosofia/cdp-policies:vX.Y.Z` at build time.
 - **Local JWKS:** `JWT_JWKS_URI=http://authentication:8014/.well-known/jwks.json` (see CDP `.capabilities.env.sample`).
 - **Cloud JWKS audience:** `JWT_AUDIENCE=capabilities`; authentication must list `capabilities` in `JWT_WEB_AUDIENCE`.
 - **Healthcheck:** `/health` exempt from Talisman HTTPS redirect since **v0.5.8+**.
