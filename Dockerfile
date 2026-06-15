@@ -9,8 +9,8 @@
 # cedarpy 4.8.1 needs the glibc manylinux wheel for attribute-based policy evaluation.
 ARG PYTHON_IMAGE=python:3.14-slim@sha256:d7a925f9eb9639a93e455b9f12c167569358818c0f62b51b88edbc8fcf34c421
 
-ARG CDP_POLICIES_IMAGE=ghcr.io/neosofia/cdp-policies:v0.1.0
-FROM ${CDP_POLICIES_IMAGE} AS cdp_policies
+ARG POLICIES_IMAGE=ghcr.io/neosofia/cdp-policies:v0.2.0
+FROM ${POLICIES_IMAGE} AS policies_bundle
 
 FROM ${PYTHON_IMAGE} AS build-base
 
@@ -68,7 +68,7 @@ COPY src ./src
 COPY openapi.json ./openapi.json
 
 # Product UI policies (from cdp-policies image; local dev may volume-mount over this path)
-COPY --from=cdp_policies /policies/capabilities /app/policies
+COPY --from=policies_bundle /policies/capabilities /app/policies
 
 EXPOSE 8019
 

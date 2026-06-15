@@ -34,10 +34,12 @@
 
 ## Docker Build & Run
 
-Build the runtime image from the capabilities repository. Production images copy the UI policy bundle from **`cdp-policies`** at build time (pinned in the Dockerfile, same pattern as authentication + `sql-template`):
+Build the runtime image from the capabilities repository. Production images copy the UI policy bundle from **`cdp-policies`** at build time via build arg **`POLICIES_IMAGE`** (default in the Dockerfile, same pattern as authentication + `sql-template`):
 
 ```bash
 docker build --target runtime -t capabilities:test .
+# Or pin explicitly:
+docker build --target runtime --build-arg POLICIES_IMAGE=ghcr.io/neosofia/cdp-policies:v0.2.0 -t capabilities:test .
 ```
 
 Publish a local policy bundle for prod-like testing:
@@ -55,7 +57,7 @@ docker run -d --rm -p 8019:8019 \
   --name capabilities-dev capabilities:test
 ```
 
-Local CDP development volume-mounts `cdp/policies/capabilities/` over `/app/policies` instead (see CDP `docker-compose.dev.yml`).
+Local CDP development builds `cdp-policies:local` and passes `POLICIES_IMAGE` at image build; compose may volume-mount `cdp/policies/capabilities/` over `/app/policies` for hot-reload (see CDP `docker-compose.local.yml` and `docker-compose.dev.yml`). Runtime config belongs in `.capabilities.env`, not inline in compose.
 
 ## Public cloud deployment
 
