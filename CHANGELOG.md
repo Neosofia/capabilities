@@ -2,6 +2,12 @@
 
 Changes for consumers of the Capabilities service. Deploy steps: [OPERATIONS.md](OPERATIONS.md).
 
+## [0.7.3] - 2026-06-16
+
+### Changed
+
+- Bump dev dependency pins for Trivy (`cryptography>=48.0.1`, `pyjwt>=2.13.0`).
+
 ## [0.7.2] - 2026-06-16
 
 ### Changed
