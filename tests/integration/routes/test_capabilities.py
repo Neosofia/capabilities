@@ -4,6 +4,11 @@ from tests.conftest import encode_test_access_token
 
 pytestmark = pytest.mark.integration
 
+MENU_OPERATOR = 'ui::Menu::"operator"'
+MENU_DEBUG = 'ui::Menu::"debug"'
+MENU_PATIENT = 'ui::Menu::"patient"'
+MENU_CLINICIAN = 'ui::Menu::"clinician"'
+
 
 def test_list_capability_namespaces(client, api_spec, validate_response):
     response = client.get("/api/v1/capabilities")
@@ -23,10 +28,10 @@ def test_operator_can_see_operator_menu(client, rsa_keypair, api_spec, validate_
     assert response.status_code == 200
     validate_response(api_spec, "/api/v1/capabilities/{namespace}", "get", 200, response.get_json())
     data = response.json
-    assert data["ui:menu:operator"] is True
-    assert data["ui:menu:debug"] is True
-    assert data["ui:menu:patient"] is False
-    assert data["ui:menu:clinician"] is False
+    assert data[MENU_OPERATOR] is True
+    assert data[MENU_DEBUG] is True
+    assert data[MENU_PATIENT] is False
+    assert data[MENU_CLINICIAN] is False
 
 
 def test_clinician_can_see_clinician_menu(client, rsa_keypair, api_spec, validate_response):
@@ -39,10 +44,10 @@ def test_clinician_can_see_clinician_menu(client, rsa_keypair, api_spec, validat
     assert response.status_code == 200
     validate_response(api_spec, "/api/v1/capabilities/{namespace}", "get", 200, response.get_json())
     data = response.json
-    assert data["ui:menu:operator"] is False
-    assert data["ui:menu:debug"] is False
-    assert data["ui:menu:patient"] is False
-    assert data["ui:menu:clinician"] is True
+    assert data[MENU_OPERATOR] is False
+    assert data[MENU_DEBUG] is False
+    assert data[MENU_PATIENT] is False
+    assert data[MENU_CLINICIAN] is True
 
 
 def test_patient_can_see_patient_menu(client, rsa_keypair, api_spec, validate_response):
@@ -55,10 +60,10 @@ def test_patient_can_see_patient_menu(client, rsa_keypair, api_spec, validate_re
     assert response.status_code == 200
     validate_response(api_spec, "/api/v1/capabilities/{namespace}", "get", 200, response.get_json())
     data = response.json
-    assert data["ui:menu:operator"] is False
-    assert data["ui:menu:debug"] is False
-    assert data["ui:menu:patient"] is True
-    assert data["ui:menu:clinician"] is False
+    assert data[MENU_OPERATOR] is False
+    assert data[MENU_DEBUG] is False
+    assert data[MENU_PATIENT] is True
+    assert data[MENU_CLINICIAN] is False
 
 
 def test_accepts_authenticated_audience(client, rsa_keypair):
@@ -73,7 +78,7 @@ def test_accepts_authenticated_audience(client, rsa_keypair):
     )
 
     assert response.status_code == 200
-    assert response.json["ui:menu:operator"] is True
+    assert response.json[MENU_OPERATOR] is True
 
 
 def test_multiple_actors_with_active_actor(client, rsa_keypair):
@@ -84,12 +89,12 @@ def test_multiple_actors_with_active_actor(client, rsa_keypair):
         headers={"Authorization": f"Bearer {token}", "X-Active-Actor": "operator"},
     )
     assert response.status_code == 200
-    assert response.json["ui:menu:operator"] is True
+    assert response.json[MENU_OPERATOR] is True
 
     response = client.get(
         "/api/v1/capabilities/ui",
         headers={"Authorization": f"Bearer {token}", "X-Active-Actor": "clinician"},
     )
     assert response.status_code == 200
-    assert response.json["ui:menu:operator"] is False
-    assert response.json["ui:menu:clinician"] is True
+    assert response.json[MENU_OPERATOR] is False
+    assert response.json[MENU_CLINICIAN] is True

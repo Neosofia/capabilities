@@ -39,7 +39,7 @@ Build the runtime image from the capabilities repository. Production images copy
 ```bash
 docker build --target runtime -t capabilities:test .
 # Or pin explicitly:
-docker build --target runtime --build-arg POLICIES_IMAGE=ghcr.io/neosofia/cdp-policies:v0.2.0 -t capabilities:test .
+docker build --target runtime --build-arg POLICIES_IMAGE=ghcr.io/neosofia/cdp-policies:v0.3.0 -t capabilities:test .
 ```
 
 Publish a local policy bundle for prod-like testing:

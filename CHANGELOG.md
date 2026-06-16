@@ -2,6 +2,13 @@
 
 Changes for consumers of the Capabilities service. Deploy steps: [OPERATIONS.md](OPERATIONS.md).
 
+## [0.7.2] - 2026-06-16
+
+### Changed
+
+- UI entitlement keys are Cedar entity ids (`ui::Menu::"clinician"`, etc.) discovered from `View` permits on `ui::` resources; `entitlements.json` and annotation comments are not used.
+- Pinned **`POLICIES_IMAGE=ghcr.io/neosofia/cdp-policies:v0.3.0`**.
+
 ## [0.7.1] - 2026-06-15
 
 ### Changed

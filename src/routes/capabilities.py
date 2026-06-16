@@ -3,7 +3,7 @@ from authentication_in_the_middle.decorators import with_authentication
 from authorization_in_the_middle.flask_identity import extract_jwt_principal_uid, extract_jwt_principal_entity
 from src.bootstrap.config import settings
 from src.bootstrap.extensions import limiter
-from src.services.entitlements_manifest import EntitlementDefinition, EntitlementsManifest
+from src.services.entitlements_catalog import EntitlementDefinition, EntitlementsManifest
 
 bp = Blueprint("capabilities", __name__, url_prefix="/api/v1/capabilities")
 
