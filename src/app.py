@@ -1,5 +1,6 @@
-from typing import Any
+import logging
 import traceback
+from typing import Any
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from werkzeug.exceptions import HTTPException
@@ -67,7 +68,12 @@ def create_app(config: dict[str, Any] | None = None) -> Flask:
 
     @app.errorhandler(Exception)
     def handle_unexpected_error(exc: Exception):
-        log_event("request.unhandled_error", route=request.path, error_type=type(exc).__name__)
+        log_event(
+            "request.unhandled_error",
+            level=logging.WARNING,
+            route=request.path,
+            error_type=type(exc).__name__,
+        )
         traceback.print_exc()
         return jsonify({"error": str(exc)}), 500
 

@@ -2,6 +2,12 @@
 
 Changes for consumers of the Capabilities service. Deploy steps: [OPERATIONS.md](OPERATIONS.md).
 
+## [0.7.4] - 2026-06-18
+
+### Fixed
+
+- Service errors and API failures are recorded in operational logs at default verbosity.
+
 ## [0.7.3] - 2026-06-16
 
 ### Changed
